@@ -323,8 +323,8 @@ String generateReturnExpr(List<String> expressions, { bool isSingleStringVar = f
 class LocalizationOptions {
   LocalizationOptions({
     String? arbDir,
-    this.outputDir,
-    this.templateArbFile = 'app_en.arb',
+    String? outputDir,
+    String? templateArbFile = 'app_en.arb',
     this.outputLocalizationFile = 'app_localizations.dart',
     this.untranslatedMessagesFile,
     this.outputClass,
@@ -340,9 +340,9 @@ class LocalizationOptions {
     this.format = false,
     this.useEscaping = false,
     this.suppressWarnings = false,
-  }) {
-    this.arbDir = arbDir ?? globals.fs.path.join('lib', 'l10n');
-  }
+  }) : arbDir = arbDir ?? globals.fs.path.join('lib', 'l10n'),
+       outputDir = outputDir ?? ''
+    templateArbFile =
 
   /// The `--arb-dir` argument.
   ///
@@ -352,13 +352,13 @@ class LocalizationOptions {
   /// The `--output-dir` argument.
   ///
   /// The directory where all output localization files should be generated.
-  final String? outputDir;
+  final String outputDir;
 
 
   /// The `--template-arb-file` argument.
   ///
   /// This path is relative to [arbDirectory].
-  final String? templateArbFile;
+  final String templateArbFile;
 
   /// The `--output-localization-file` argument.
   ///
