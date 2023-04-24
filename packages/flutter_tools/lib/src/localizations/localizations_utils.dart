@@ -323,36 +323,44 @@ String generateReturnExpr(List<String> expressions, { bool isSingleStringVar = f
 class LocalizationOptions {
   LocalizationOptions({
     String? arbDir,
-    String? outputDir,
-    String? templateArbFile = 'app_en.arb',
-    this.outputLocalizationFile = 'app_localizations.dart',
+    this.outputDir,
+    String? templateArbFile,
+    String? outputLocalizationFile,
     this.untranslatedMessagesFile,
-    this.outputClass,
+    String? outputClass,
     this.preferredSupportedLocales,
     this.header,
     this.headerFile,
-    this.useDeferredLoading,
+    bool? useDeferredLoading,
     this.genInputsAndOutputsList,
-    this.syntheticPackage = true,
+    bool? syntheticPackage,
     this.projectDir,
-    this.requiredResourceAttributes = false,
-    this.nullableGetter = true,
-    this.format = false,
-    this.useEscaping = false,
-    this.suppressWarnings = false,
+    bool? requiredResourceAttributes,
+    bool? nullableGetter,
+    bool? format,
+    bool? useEscaping,
+    bool? suppressWarnings,
   }) : arbDir = arbDir ?? globals.fs.path.join('lib', 'l10n'),
-       outputDir = outputDir ?? ''
-    templateArbFile =
+       templateArbFile = templateArbFile ?? 'app_en.arb',
+       outputLocalizationFile = outputLocalizationFile ?? 'app_localizations.dart',
+       outputClass = outputClass ?? 'AppLocalizations',
+       useDeferredLoading = useDeferredLoading ?? false,
+       syntheticPackage = syntheticPackage ?? true,
+       requiredResourceAttributes = requiredResourceAttributes ?? false,
+       nullableGetter = nullableGetter ?? true,
+       format = format ?? false,
+       useEscaping = useEscaping ?? false,
+       suppressWarnings = suppressWarnings ?? false;
 
   /// The `--arb-dir` argument.
   ///
   /// The directory where all input localization files should reside.
-  late final String arbDir;
+  final String arbDir;
 
   /// The `--output-dir` argument.
   ///
   /// The directory where all output localization files should be generated.
-  final String outputDir;
+  final String? outputDir;
 
 
   /// The `--template-arb-file` argument.
@@ -363,7 +371,7 @@ class LocalizationOptions {
   /// The `--output-localization-file` argument.
   ///
   /// This path is relative to [arbDir].
-  final String? outputLocalizationFile;
+  final String outputLocalizationFile;
 
   /// The `--untranslated-messages-file` argument.
   ///
@@ -371,7 +379,7 @@ class LocalizationOptions {
   final String? untranslatedMessagesFile;
 
   /// The `--output-class` argument.
-  final String? outputClass;
+  final String outputClass;
 
   /// The `--preferred-supported-locales` argument.
   final List<String>? preferredSupportedLocales;
@@ -391,7 +399,7 @@ class LocalizationOptions {
   ///
   /// Whether to generate the Dart localization file with locales imported
   /// as deferred.
-  final bool? useDeferredLoading;
+  final bool useDeferredLoading;
 
   /// The `--gen-inputs-and-outputs-list` argument.
   ///
@@ -470,12 +478,12 @@ LocalizationOptions parseLocalizationsOptionsFromYAML({
     headerFile: _tryReadUri(yamlNode, 'header-file', logger)?.path,
     useDeferredLoading: _tryReadBool(yamlNode, 'use-deferred-loading', logger),
     preferredSupportedLocales: _tryReadStringList(yamlNode, 'preferred-supported-locales', logger),
-    syntheticPackage: _tryReadBool(yamlNode, 'synthetic-package', logger) ?? true,
-    requiredResourceAttributes: _tryReadBool(yamlNode, 'required-resource-attributes', logger) ?? false,
-    nullableGetter: _tryReadBool(yamlNode, 'nullable-getter', logger) ?? true,
-    format: _tryReadBool(yamlNode, 'format', logger) ?? false,
-    useEscaping: _tryReadBool(yamlNode, 'use-escaping', logger) ?? false,
-    suppressWarnings: _tryReadBool(yamlNode, 'suppress-warnings', logger) ?? false,
+    syntheticPackage: _tryReadBool(yamlNode, 'synthetic-package', logger),
+    requiredResourceAttributes: _tryReadBool(yamlNode, 'required-resource-attributes', logger),
+    nullableGetter: _tryReadBool(yamlNode, 'nullable-getter', logger),
+    format: _tryReadBool(yamlNode, 'format', logger),
+    useEscaping: _tryReadBool(yamlNode, 'use-escaping', logger),
+    suppressWarnings: _tryReadBool(yamlNode, 'suppress-warnings', logger),
   );
 }
 
@@ -486,7 +494,7 @@ LocalizationOptions parseLocalizationsOptionsFromCommand({
   return LocalizationOptions(
     arbDir: command.stringArg('arb-dir'),
     outputDir: command.stringArg('output-dir'),
-    outputLocalizationFile: command.stringArg('output-localizations-file'),
+    outputLocalizationFile: command.stringArg('output-localization-file'),
     templateArbFile: command.stringArg('template-arb-file'),
     untranslatedMessagesFile: command.stringArg('untranslated-messages-file'),
     outputClass: command.stringArg('output-class'),
